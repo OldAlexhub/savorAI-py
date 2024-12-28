@@ -28,6 +28,6 @@
 ### **1. Clone the Repository**
 
 ```bash
-git clone https://github.com/yourusername/your-repo.git
+git clone https://github.com/OldAlexhub/savorAI-py.git
 cd your-repo
 ```
