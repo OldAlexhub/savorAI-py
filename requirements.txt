@@ -1,0 +1,9 @@
+flask
+flask-cors
+pymongo
+numpy
+pandas
+scikit-learn
+python-dotenv
+sentence-transformers
+gunicorn
