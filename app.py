@@ -5,12 +5,13 @@ from sklearn.ensemble import RandomForestClassifier
 from sentence_transformers import SentenceTransformer
 import gc
 from functools import lru_cache
-from dotenv import load_dotenv
 import os
 import pymongo
 
 # Load environment variables
-load_dotenv('.env')
+# Removed load_dotenv if you're not using it in production
+# from dotenv import load_dotenv
+# load_dotenv('.env')
 
 app = Flask(__name__)
 CORS(app)
@@ -25,10 +26,6 @@ def get_db():
 def get_processed_data():
     db = get_db()
     return pd.DataFrame(list(db['processed_data'].find())).drop('_id', axis=1)
-
-def get_data():
-    db = get_db()
-    return pd.DataFrame(list(db['data'].find())).drop('_id', axis=1)
 
 @lru_cache(maxsize=1)
 def get_transformer_model():
@@ -61,6 +58,10 @@ def get_prediction():
             'cook_time': float(user_input.get('cooktime', 0))
         }])
 
+        # Validate Input
+        if input_data.empty:
+            return jsonify({'error': 'Invalid or missing input'}), 400
+
         # Load Models
         transformer_model = get_transformer_model()
         rf_model = get_rf_model()
@@ -90,10 +91,18 @@ def get_prediction():
 
         return jsonify(result)
 
+    except KeyError as ke:
+        gc.collect()
+        return jsonify({'error': 'KeyError', 'details': str(ke)}), 400
+
+    except ValueError as ve:
+        gc.collect()
+        return jsonify({'error': 'ValueError', 'details': str(ve)}), 400
+
     except Exception as e:
         gc.collect()
         return jsonify({'error': 'An error occurred', 'details': str(e)}), 500
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, host='0.0.0.0', port=8000)
