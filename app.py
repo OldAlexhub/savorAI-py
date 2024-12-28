@@ -57,8 +57,8 @@ def get_prediction():
             'cuisine': user_input.get('cuisine', ''),
             'course': user_input.get('course', ''),
             'diet': user_input.get('diet', ''),
-            'prep_time': float(user_input.get('prep_time', 0)),
-            'cook_time': float(user_input.get('cook_time', 0))
+            'prep_time': float(user_input.get('preptime', 0)),
+            'cook_time': float(user_input.get('cooktime', 0))
         }])
 
         # Load Models
