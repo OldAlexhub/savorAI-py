@@ -22,7 +22,7 @@ data_collection = pd.DataFrame(list(db['data'].find())).drop('_id', axis=1)
 
 # Model Initialization
 model = SentenceTransformer('all-MiniLM-L6-v2')
-rfmodel = RandomForestClassifier(n_estimators=25, random_state=42)
+rfmodel = RandomForestClassifier(n_estimators=5, random_state=42)
 
 # Data Preparation
 X = processed_collection.drop('name', axis=1)
